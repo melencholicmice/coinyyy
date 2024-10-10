@@ -7,7 +7,7 @@ export interface Config {
     username?: string;
     password?: string;
     database?: string;
-    uri: string | undefined;
+    uri: string;
   };
   logging: {
     level: string;
@@ -18,6 +18,6 @@ export interface Config {
     methods: string[];
   };
   apiKeys: {
-    thirdPartyService: string;
+    coinGecko: string;
   };
 }
