@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import connectDb from './utils/connectDb';
+import { addJob } from './utils/queue'; 
 
 const app = express();
 
@@ -30,6 +31,7 @@ const server = http.createServer(app);
 const startServer = async () => {
   try {
     await connectDb();
+    await addJob({ name: 'fetchCoinData' });
     server.listen(config.port, () => {
       logger.info(`Server running on http://localhost:${config.port}/`);
     });
@@ -38,5 +40,13 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received. Shutting down gracefully...');
+  server.close(() => {
+    logger.info('HTTP server closed.');
+    process.exit(0);
+  });
+});
 
 startServer();

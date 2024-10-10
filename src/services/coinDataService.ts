@@ -1,6 +1,7 @@
 import { Config } from '../config/base';
 import config from '../config/config';
 import { ICoinData } from '../types/getCoinDataServiceInterface';
+import { Coin } from '../models/coins.model';
 
 class CoinDataService {
   private apiUrl: string = 'https://api.coingecko.com/api/v3/simple/price';
@@ -65,6 +66,25 @@ class CoinDataService {
     } catch (error) {
       console.error('Error fetching data:', error);
       return undefined;
+    }
+  }
+
+  public async addCoinData(coinData: ICoinData): Promise<void> {
+    try {
+      for (const [coinId, coinInfo] of Object.entries(coinData)) {
+        const coinDocument = new Coin({
+          coinId: coinId,
+          price: coinInfo.usd,
+          marketCap: coinInfo.usd_market_cap,
+          '24hChange': coinInfo.usd_24h_change,
+        });
+
+        await coinDocument.save();
+        console.log(`Coin data for ${coinId} added successfully.`);
+      }
+    } catch (error) {
+      console.error('Error adding coin data:', error);
+      throw error;
     }
   }
 }

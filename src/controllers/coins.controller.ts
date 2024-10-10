@@ -13,7 +13,8 @@ export class CoinController {
   public getCoinsById = async (req: Request, res: Response): Promise<void> => {
     try {
       const coinIds: CoinId = req.body.coin;
-      const coins: ICoinData | undefined = await this.coinService.getCoinData(coinIds);
+      const coins: ICoinData | undefined =
+        await this.coinService.getCoinData(coinIds);
 
       if (!coins) {
         res.status(404).json({ error: 'Coins not found' });

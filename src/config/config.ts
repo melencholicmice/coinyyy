@@ -14,6 +14,12 @@ const createConfig = (): Config => {
     );
   }
 
+  if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
+    throw new Error(
+      'REDIS_HOST or REDIS_PORT is not defined in environment variables'
+    );
+  }
+
   const config: Config = {
     env: 'development',
     port: 8080,
@@ -32,6 +38,10 @@ const createConfig = (): Config => {
     },
     apiKeys: {
       coinGecko: process.env.COIN_GECKO_API_KEY,
+    },
+    redis: {
+      host: process.env.REDIS_HOST,
+      port: parseInt(process.env.REDIS_PORT) || 6379,
     },
   };
 

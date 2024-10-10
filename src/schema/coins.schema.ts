@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import CoinId  from '../types/coinIds';
+import CoinId from '../types/coinIds';
 
 export const coinSchema = z.object({
   coin: z.enum(Object.values(CoinId) as [string, ...string[]]),

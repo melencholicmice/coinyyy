@@ -9,6 +9,11 @@ export interface Config {
     database?: string;
     uri: string;
   };
+  redis: {
+    host: string;
+    port: number;
+    password?: string;
+  };
   logging: {
     level: string;
     format: string;

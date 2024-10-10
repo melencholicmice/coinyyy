@@ -1,8 +1,51 @@
 services:
+  backend:
+    build: .
+    container_name: my-backend
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://rootuser:rootpass@mongodb:27017/mydatabase?authSource=admin
+      - PORT=3000
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
+    command: ["ts-node", "src/index.ts"]
+
+  worker:
+    build: .
+    container_name: my-worker
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=your_redis_password
+      - MONGO_URI=mongodb://rootuser:rootpass@mongodb:27017/mydatabase?authSource=admin
+    depends_on:
+      - redis
+      - mongodb
+      - backend
+    networks:
+      - app-network
+    command: ["ts-node", "src/worker.ts"]
+
+  redis:
+    image: redis:6.0
+    container_name: redis
+    command: ["redis-server", "--requirepass", "your_redis_password", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
   mongodb:
     image: mongo:6.0
     container_name: mongodb
-    restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: rootuser
       MONGO_INITDB_ROOT_PASSWORD: rootpass
@@ -11,6 +54,15 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
 
 volumes:
+  redis-data:
+    driver: local
   mongo-data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
