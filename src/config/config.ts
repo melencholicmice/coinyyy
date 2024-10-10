@@ -22,7 +22,7 @@ const createConfig = (): Config => {
 
   const config: Config = {
     env: 'development',
-    port: 8080,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
     database: {
       host: 'localhost',
       port: 27017,
@@ -41,7 +41,7 @@ const createConfig = (): Config => {
     },
     redis: {
       host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT) || 6379,
+      port: parseInt(process.env.REDIS_PORT,10) || 6379,
     },
   };
 

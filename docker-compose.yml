@@ -14,7 +14,7 @@ services:
       - app-network
     ports:
       - "3000:3000"
-    command: ["ts-node", "src/index.ts"]
+    command: ["node", "build/index.js"]
 
   worker:
     build: .
@@ -22,7 +22,6 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_PASSWORD=your_redis_password
       - MONGO_URI=mongodb://rootuser:rootpass@mongodb:27017/mydatabase?authSource=admin
     depends_on:
       - redis
@@ -30,12 +29,12 @@ services:
       - backend
     networks:
       - app-network
-    command: ["ts-node", "src/worker.ts"]
+    command: ["node", "build/worker.js"]
 
   redis:
-    image: redis:6.0
+    image: redis:7.4-alpine
     container_name: redis
-    command: ["redis-server", "--requirepass", "your_redis_password", "--appendonly", "yes"]
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "6379:6379"
     volumes:
@@ -44,7 +43,7 @@ services:
       - app-network
 
   mongodb:
-    image: mongo:6.0
+    image: mongo:latest
     container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: rootuser

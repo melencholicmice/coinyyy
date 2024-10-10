@@ -1,32 +1,21 @@
-# Base and Dependency Stage
-FROM node:18-alpine AS base
+FROM node:18-alpine
 
+# Install pnpm globally
 RUN npm install -g pnpm@latest
+
+# Set working directory
 WORKDIR /app
 
+# Copy the package files and install dependencies
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# Build Stage
-FROM base AS build
-
+# Copy the rest of the application code and build TypeScript
 COPY . .
 RUN pnpm run build
 
-# Production Stage
-FROM node:18-alpine
-
-RUN npm install -g pnpm@latest
-WORKDIR /app
-
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
-
-COPY --from=build /app/dist ./dist
-
-RUN adduser -D appuser
-USER appuser
-
+# Expose the necessary port
 EXPOSE 3000
 
-CMD ["node", "dist/index.js"]
+# Default command: Can be overridden in Docker Compose
+CMD ["node", "build/index.js"]
