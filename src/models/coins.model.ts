@@ -9,19 +9,19 @@ interface ICoin {
 
 interface ICoinModel extends ICoin, Document {}
 
+
 const CoinSchema: Schema = new Schema(
   {
     coinId: {
       type: String,
       required: true,
-      unique: true,
       enum: Object.values(CoinId),
     },
     price: { type: Number, required: true },
-    marketCap: { type: Number, required: true, unique: true },
+    marketCap: { type: Number, required: true },
     '24hChange': { type: Number, required: true },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+  { timestamps: true } 
 );
 
 const Coin = mongoose.model<ICoinModel>('Coin', CoinSchema);

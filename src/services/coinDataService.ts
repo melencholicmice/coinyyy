@@ -72,15 +72,17 @@ class CoinDataService {
   public async addCoinData(coinData: ICoinData): Promise<void> {
     try {
       for (const [coinId, coinInfo] of Object.entries(coinData)) {
-        const coinDocument = new Coin({
-          coinId: coinId,
-          price: coinInfo.usd,
-          marketCap: coinInfo.usd_market_cap,
-          '24hChange': coinInfo.usd_24h_change,
-        });
-
-        await coinDocument.save();
-        console.log(`Coin data for ${coinId} added successfully.`);
+        try {
+          await Coin.create({
+            coinId: coinId,
+            price: coinInfo.usd,
+            marketCap: coinInfo.usd_market_cap,
+            '24hChange': coinInfo.usd_24h_change,
+          });
+          console.log(`Coin data for ${coinId} added successfully.`);
+        } catch (error) {
+          console.error(`Error adding coin data for ${coinId}:`, error);
+        }
       }
     } catch (error) {
       console.error('Error adding coin data:', error);
