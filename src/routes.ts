@@ -37,7 +37,7 @@ function addRoutes(app: Express): void {
   app.post(
     '/stats',
     validateRequest(coinSchema),
-    cacheApiResponse(30, false),
+    // cacheApiResponse(30, false),
     coinController.getCoinsById
   );
 
@@ -67,7 +67,7 @@ function addRoutes(app: Express): void {
   app.post(
     '/deviation',
     validateRequest(coinSchema),
-    cacheApiResponse(0, true),
+    // cacheApiResponse(0, true),
     coinController.getStandardDeviation
   );
 }

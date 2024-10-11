@@ -7,7 +7,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
     info: {
       title: 'KoinX Backend Assignment by Heet  Dhorajiya',
       version: '1.0.0',
-      description: 'Backend assignment for KoinX',
+      description: 'Backend assignment for KoinX,\n please note that this deployment does not includes periodic coin data fetching and api chaching because it requires reddis and getting a free reddis deployment that just works was not easy :(, please go to the github repo for the complete application.',
       contact: {
         name: 'Heet Dhorajiya',
         email: 'hsdhorajiya80@gmail.com',

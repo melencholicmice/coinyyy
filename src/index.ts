@@ -32,11 +32,11 @@ const server = http.createServer(app);
 const startServer = async () => {
   try {
     await connectDb();
-    await addJob({ name: 'fetchCoinData' });
+    // await addJob({ name: 'fetchCoinData' });
     server.listen(config.port, () => {
       logger.info(`Server running on http://localhost:${config.port}/`);
     });
-    await latestCoinRecordManager.setLatestCoinRecords();
+    // await latestCoinRecordManager.setLatestCoinRecords();
   } catch (error) {
     logger.error('Failed to start server:', error);
     process.exit(1);
