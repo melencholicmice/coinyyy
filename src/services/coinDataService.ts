@@ -1,7 +1,7 @@
 import { Config } from '../config/base';
 import config from '../config/config';
 import { ICoinData } from '../types/getCoinDataServiceInterface';
-import { Coin } from '../models/coins.model';
+import { Coin, ICoinModel } from '../models/coins.model';
 
 class CoinDataService {
   private apiUrl: string = 'https://api.coingecko.com/api/v3/simple/price';
@@ -86,6 +86,33 @@ class CoinDataService {
       }
     } catch (error) {
       console.error('Error adding coin data:', error);
+      throw error;
+    }
+  }
+
+  public async calculateStandardDeviation(coinId: string): Promise<number> {
+    try {
+      const lastHundredRecords = await Coin.find({
+        coinId: coinId
+      })
+        .sort({ createdAt: -1 })
+        .limit(100)
+        .lean()
+        .exec() as ICoinModel[];
+
+      if (lastHundredRecords.length === 0) {
+        throw new Error(`No records found for coinId: ${coinId}`);
+      }
+
+      const prices = lastHundredRecords.map(record => record.price);
+      const mean = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+      const squaredDifferences = prices.map(price => Math.pow(price - mean, 2));
+      const variance = squaredDifferences.reduce((sum, sqDiff) => sum + sqDiff, 0) / prices.length;
+      const standardDeviation = Math.sqrt(variance);
+
+      return standardDeviation;
+    } catch (error) {
+      console.error(`Error calculating standard deviation for ${coinId}:`, error);
       throw error;
     }
   }

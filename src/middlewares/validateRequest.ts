@@ -1,18 +1,14 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { ZodSchema } from 'zod';
+import { ZodSchema, ZodError } from 'zod';
 
 const validateRequest = (schema: ZodSchema): RequestHandler => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
-      schema.parse({
-        body: req.body,
-        query: req.query,
-        params: req.params,
-      });
+      schema.parse(req.body);
       next();
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).json({ message: JSON.parse(error.message) });
+      if (error instanceof ZodError) {
+        res.status(400).json({ message: error.errors });
       } else {
         res.status(400).json({ message: 'Invalid request' });
       }

@@ -13,8 +13,14 @@ export class CoinController {
   public getCoinsById = async (req: Request, res: Response): Promise<void> => {
     try {
       const coinIds: CoinId = req.body.coin;
-      const coins: ICoinData | undefined =
-        await this.coinService.getCoinData(coinIds);
+      let coins: ICoinData | undefined;
+
+      try {
+        coins = await this.coinService.getCoinData(coinIds);
+      } catch (error) {
+        res.status(500).json({ error: 'Error fetching coin data' });
+        return;
+      }
 
       if (!coins) {
         res.status(404).json({ error: 'Coins not found' });
@@ -22,6 +28,30 @@ export class CoinController {
       }
 
       res.status(200).json(coins);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  public getStandardDeviation = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const coinId: CoinId = req.body.coin;
+      
+      let standardDeviation: number | undefined;
+
+      try {
+        standardDeviation = await this.coinService.calculateStandardDeviation(coinId);
+      } catch (error) {
+        res.status(500).json({ error: 'Error calculating standard deviation' });
+        return;
+      }
+
+      if (standardDeviation === undefined) {
+        res.status(404).json({ error: 'Standard deviation data not found' });
+        return;
+      }
+
+      res.status(200).json({ "deviation":standardDeviation });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
