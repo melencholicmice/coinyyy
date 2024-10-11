@@ -9,6 +9,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import connectDb from './utils/connectDb';
 import { addJob } from './utils/queue'; 
+import latestCoinRecordManager from './utils/LatestCoinRecord';
 
 const app = express();
 
@@ -35,6 +36,7 @@ const startServer = async () => {
     server.listen(config.port, () => {
       logger.info(`Server running on http://localhost:${config.port}/`);
     });
+    await latestCoinRecordManager.setLatestCoinRecords();
   } catch (error) {
     logger.error('Failed to start server:', error);
     process.exit(1);

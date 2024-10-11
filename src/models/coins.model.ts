@@ -7,7 +7,10 @@ interface ICoin {
   '24hChange': number;
 }
 
-interface ICoinModel extends ICoin, Document {}
+interface ICoinModel extends ICoin, Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 
 const CoinSchema: Schema = new Schema(
