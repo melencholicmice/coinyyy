@@ -4,10 +4,11 @@ import redisConnection from './utils/connectReddis';
 import logger from './utils/logger';
 import connectDb from './utils/connectDb';
 
-
 connectDb();
 
-const worker = new Worker(QUEUE_NAME, processJob, { connection: redisConnection });
+const worker = new Worker(QUEUE_NAME, processJob, {
+  connection: redisConnection,
+});
 
 worker.on('completed', (job) => {
   logger.info(`Job '${job.name}' completed successfully`, { jobId: job.id });
@@ -18,13 +19,13 @@ worker.on('failed', (job, error) => {
     logger.error('Job failed without job details', { error });
     return;
   }
-  
+
   logger.error(`Job '${job.name}' failed`, { jobId: job.id, error });
 });
 
 process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, closing worker...');
-  
+
   try {
     await worker.close();
     logger.info('Worker closed successfully');

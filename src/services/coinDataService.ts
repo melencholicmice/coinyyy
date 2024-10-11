@@ -92,27 +92,35 @@ class CoinDataService {
 
   public async calculateStandardDeviation(coinId: string): Promise<number> {
     try {
-      const lastHundredRecords = await Coin.find({
-        coinId: coinId
+      const lastHundredRecords = (await Coin.find({
+        coinId: coinId,
       })
         .sort({ createdAt: -1 })
         .limit(100)
         .lean()
-        .exec() as ICoinModel[];
+        .exec()) as ICoinModel[];
 
       if (lastHundredRecords.length === 0) {
         throw new Error(`No records found for coinId: ${coinId}`);
       }
 
-      const prices = lastHundredRecords.map(record => record.price);
-      const mean = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-      const squaredDifferences = prices.map(price => Math.pow(price - mean, 2));
-      const variance = squaredDifferences.reduce((sum, sqDiff) => sum + sqDiff, 0) / prices.length;
+      const prices = lastHundredRecords.map((record) => record.price);
+      const mean =
+        prices.reduce((sum, price) => sum + price, 0) / prices.length;
+      const squaredDifferences = prices.map((price) =>
+        Math.pow(price - mean, 2)
+      );
+      const variance =
+        squaredDifferences.reduce((sum, sqDiff) => sum + sqDiff, 0) /
+        prices.length;
       const standardDeviation = Math.sqrt(variance);
 
       return standardDeviation;
     } catch (error) {
-      console.error(`Error calculating standard deviation for ${coinId}:`, error);
+      console.error(
+        `Error calculating standard deviation for ${coinId}:`,
+        error
+      );
       throw error;
     }
   }

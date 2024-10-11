@@ -12,7 +12,6 @@ interface ICoinModel extends ICoin, Document {
   updatedAt: Date;
 }
 
-
 const CoinSchema: Schema = new Schema(
   {
     coinId: {
@@ -24,7 +23,7 @@ const CoinSchema: Schema = new Schema(
     marketCap: { type: Number, required: true },
     '24hChange': { type: Number, required: true },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 const Coin = mongoose.model<ICoinModel>('Coin', CoinSchema);

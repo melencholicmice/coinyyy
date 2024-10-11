@@ -3,8 +3,15 @@ import { NextFunction, Request, Response, RequestHandler } from 'express';
 import redisConnection from '../utils/connectReddis';
 import latestCoinRecordManager from '../utils/LatestCoinRecord';
 
-export const cacheApiResponse = (duration: number, latestTimeCaching: boolean): RequestHandler => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const cacheApiResponse = (
+  duration: number,
+  latestTimeCaching: boolean
+): RequestHandler => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     const key = `api:${req.method}:${req.originalUrl}:${JSON.stringify(req.body)}`;
 
     try {
@@ -16,7 +23,9 @@ export const cacheApiResponse = (duration: number, latestTimeCaching: boolean): 
       }
 
       if (latestTimeCaching) {
-        duration = await latestCoinRecordManager.getTimeDifference(req.body.coinId);
+        duration = await latestCoinRecordManager.getTimeDifference(
+          req.body.coinId
+        );
         duration *= 60;
       }
 

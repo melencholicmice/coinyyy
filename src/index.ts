@@ -8,7 +8,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import connectDb from './utils/connectDb';
-import { addJob } from './utils/queue'; 
+import { addJob } from './utils/queue';
 import latestCoinRecordManager from './utils/LatestCoinRecord';
 
 const app = express();

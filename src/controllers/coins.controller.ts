@@ -33,14 +33,18 @@ export class CoinController {
     }
   };
 
-  public getStandardDeviation = async (req: Request, res: Response): Promise<void> => {
+  public getStandardDeviation = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
     try {
       const coinId: CoinId = req.body.coin;
-      
+
       let standardDeviation: number | undefined;
 
       try {
-        standardDeviation = await this.coinService.calculateStandardDeviation(coinId);
+        standardDeviation =
+          await this.coinService.calculateStandardDeviation(coinId);
       } catch (error) {
         res.status(500).json({ error: 'Error calculating standard deviation' });
         return;
@@ -51,7 +55,7 @@ export class CoinController {
         return;
       }
 
-      res.status(200).json({ "deviation":standardDeviation });
+      res.status(200).json({ deviation: standardDeviation });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }

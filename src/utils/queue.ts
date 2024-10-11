@@ -16,7 +16,9 @@ const addJob = async (job: JobData): Promise<void> => {
   try {
     const options = { repeat: { every: REPEAT_INTERVAL } };
     await queue.add(job.name, job, options);
-    logger.info(`Job '${job.name}' added to queue with a repeat interval of ${REPEAT_INTERVAL / (60 * 1000)} minutes.`);
+    logger.info(
+      `Job '${job.name}' added to queue with a repeat interval of ${REPEAT_INTERVAL / (60 * 1000)} minutes.`
+    );
   } catch (error) {
     logger.error('Error adding job to queue:', { error });
   }
@@ -36,10 +38,14 @@ const processJob = async (job: Job<JobData>): Promise<void> => {
 
   try {
     await handler(job);
-    logger.info(`Job '${job.name}' with ID '${job.id}' processed successfully.`);
+    logger.info(
+      `Job '${job.name}' with ID '${job.id}' processed successfully.`
+    );
   } catch (error) {
-    logger.error(`Error processing job '${job.name}' with ID '${job.id}':`, { error });
-    throw error; 
+    logger.error(`Error processing job '${job.name}' with ID '${job.id}':`, {
+      error,
+    });
+    throw error;
   }
 };
 
