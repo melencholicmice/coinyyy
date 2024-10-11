@@ -69,8 +69,7 @@ Together, these components ensure efficient caching and data freshness in the cr
 
 1. Clone the repository:
    
-   git clone https://github.com/your-username/crypto-price-tracker.git
-   cd crypto-price-tracker
+
    
 2. Set up environment variables:
    - Create a `.env` file in the root directory
