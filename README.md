@@ -19,33 +19,25 @@ This project is a cryptocurrency price tracking application that provides real-t
 
 Serves the Swagger UI documentation.
 
-### POST /stats 
+### GET /stats 
 
 Get coin statistics by ID.
 
-**Request Body:**
+**Query Parameters:**
 
-
-{
-  "coin": "string"
-}
-
+- `coin`: string (required)
 
 **Responses:**
 - 200: ✅ Successful response
 - 400: ❌ Bad request
 
-### POST /deviation 
+### GET /deviation 
 
 Get standard deviation for coins.
 
-**Request Body:**
+**Query Parameters:**
 
-
-{
-  "coin": "string"
-}
-
+- `coin`: string (required)
 
 **Responses:**
 - 200: ✅ Successful response

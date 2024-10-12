@@ -12,7 +12,7 @@ export class CoinController {
 
   public getCoinsById = async (req: Request, res: Response): Promise<void> => {
     try {
-      const coinIds: CoinId = req.body.coin;
+      const coinIds: CoinId = req.query.coin as CoinId;
       let coins: ICoinData | undefined;
 
       try {
@@ -38,7 +38,7 @@ export class CoinController {
     res: Response
   ): Promise<void> => {
     try {
-      const coinId: CoinId = req.body.coin;
+      const coinId: CoinId = req.query.coin as CoinId;
 
       let standardDeviation: number | undefined;
 
