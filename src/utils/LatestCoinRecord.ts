@@ -61,6 +61,16 @@ class LatestCoinRecordManager {
     logger.debug(`Time difference for ${coinId}: ${result}ms`);
     return result;
   }
+
+  async updateAllLatestCoinRecordsToCurrentTime(): Promise<void> {
+    logger.info('Updating all latest coin records to current time');
+    const currentTime = new Date().toISOString();
+    for (const coinId of Object.values(CoinId)) {
+      await this.redis.set(`latest_coin_record:${coinId}`, currentTime);
+      logger.debug(`Updated latest coin record for ${coinId} to ${currentTime}`);
+    }
+    logger.info('Finished updating all latest coin records to current time');
+  }
 }
 
 const latestCoinRecordManager = new LatestCoinRecordManager();

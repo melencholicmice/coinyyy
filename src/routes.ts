@@ -14,27 +14,22 @@ function addRoutes(app: Express): void {
   /**
    * @openapi
    * /stats:
-   *   post:
+   *   get:
    *     summary: Get coin statistics by ID
    *     tags: [Coins]
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               coin:
-   *                 type: string
-   *             required:
-   *               - coin
+   *     parameters:
+   *       - in: query
+   *         name: coin
+   *         required: true
+   *         schema:
+   *           type: string
    *     responses:
    *       200:
    *         description: Successful response
    *       400:
    *         description: Bad request
    */
-  app.post(
+  app.get(
     '/stats',
     validateRequest(coinSchema),
     // cacheApiResponse(30, false),
@@ -44,27 +39,22 @@ function addRoutes(app: Express): void {
   /**
    * @openapi
    * /deviation:
-   *   post:
+   *   get:
    *     summary: Get standard deviation for coins
    *     tags: [Coins]
-   *     requestBody:
-   *       required: true
-   *       ontent:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             properties:
-   *               coin:
-   *                 type: string
-   *             required:
-   *               - coin
+   *     parameters:
+   *       - in: query
+   *         name: coin
+   *         required: true
+   *         schema:
+   *           type: string
    *     responses:
    *       200:
    *         description: Successful response
    *       400:
    *         description: Bad request
    */
-  app.post(
+  app.get(
     '/deviation',
     validateRequest(coinSchema),
     // cacheApiResponse(0, true),
