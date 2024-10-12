@@ -1,5 +1,6 @@
 import CoinDataService from '../services/coinDataService';
 import CoinId from '../types/coinIds';
+import latestCoinRecordManager from '../utils/LatestCoinRecord';
 import logger from '../utils/logger';
 
 const getCoinDataTask = async (): Promise<void> => {
@@ -10,6 +11,7 @@ const getCoinDataTask = async (): Promise<void> => {
     throw new Error('Failed to get coin data');
   }
   await coinService.addCoinData(coinData);
+  latestCoinRecordManager.updateAllLatestCoinRecordsToCurrentTime();
   logger.info('Coin data added successfully');
 };
 
